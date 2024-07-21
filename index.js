@@ -29,9 +29,21 @@ app.post("/api", async (req, res) => {
   }
 });
 
+app.delete("/api", async (req, res) => {
+  try {
+    const name = req.body;
+    console.log(name);
+    const product = await product.delete({ name: name });
+    res.status(200).json(product);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 app.get("/api", async (req, res) => {
   try {
-    const products = await product.find({ quantity: { $gte: 60 } });
+    // const products = await product.find({ quantity: { $gte: 60 } });
+    const products = await product.find();
 
     res.status(200).json(products);
   } catch (err) {
