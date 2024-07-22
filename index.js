@@ -31,19 +31,62 @@ app.post("/api", async (req, res) => {
 
 app.delete("/api", async (req, res) => {
   try {
-    const name = req.body;
+    const { name } = req.body;
     console.log(name);
-    const product = await product.delete({ name: name });
-    res.status(200).json(product);
+    const result = await product.deleteOne({ name: name });
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
 
-app.get("/api", async (req, res) => {
+app.put("/api/product/:id", async (req, res) => {
   try {
-    // const products = await product.find({ quantity: { $gte: 60 } });
-    const products = await product.find();
+    const { id } = req.params;
+    const result = await product.findByIdAndUpdate(id, req.body);
+
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+// update just the name by the id
+app.put("/api/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    const result = await product.updateOne({ _id: id }, { $set: { name: name } });
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+// get all products
+app.get("/api/", async (req, res) => {
+  try {
+    const products = await product.find({});
+
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+// get products by id
+app.get("/api/:id", async (req, res) => {
+  try {
+    const products = await product.find({ _id: req.params.id });
+
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+// get products where the quantity grater then 60
+app.get("/api/products", async (req, res) => {
+  try {
+    const products = await product.find({ quantity: { $gte: 60 } });
 
     res.status(200).json(products);
   } catch (err) {
@@ -56,6 +99,7 @@ mongoose
   .connect(`mongodb+srv://${username}:${apiKey}@${dbUrl}`)
   .then(() => {
     console.log("db connected");
+
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
