@@ -2,7 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
-import productrouter from "./routes/product.route.js";
+import productRouter from "./routes/product.route.js";
+import userRouter from "./routes/user.route.js";
 
 const port = process.env.PORT;
 const username = process.env.USER_NAME;
@@ -18,7 +19,8 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.use(productrouter);
+app.use("/products", productRouter);
+app.use("/users", userRouter);
 
 // mongodb cnx setup
 mongoose
