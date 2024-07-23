@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 dotenv.config();
 import productRouter from "./routes/product.route.js";
 import userRouter from "./routes/user.route.js";
@@ -14,6 +15,7 @@ const app = express();
 
 // using express.son middleware
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello World");
