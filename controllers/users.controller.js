@@ -64,5 +64,15 @@ const userController = {
       res.status(500).json({ message: "Internal server error" });
     }
   },
+
+  logout: async (req, res) => {
+    try {
+      res.clearCookie("token");
+      res.json({ message: "Logout successful" });
+    } catch (error) {
+      console.error("Logout error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
 };
 export default userController;
